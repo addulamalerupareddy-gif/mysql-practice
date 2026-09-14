@@ -1,0 +1,149 @@
+select *from orders;
+CREATE DATABASE IF NOT EXISTS food_delivery_db;
+USE food_delivery_db;
+
+CREATE TABLE orders (
+    order_id INT PRIMARY KEY,
+    customer_name VARCHAR(100) NOT NULL,
+    city VARCHAR(50) NOT NULL,
+    restaurant VARCHAR(100) NOT NULL,
+    food_category VARCHAR(50) NOT NULL,
+    order_value DECIMAL(10,2) NOT NULL,
+    delivery_fee DECIMAL(10,2) NOT NULL,
+    distance_km DECIMAL(5,2) NOT NULL,
+    customer_age INT NOT NULL,
+    delivery_time_min INT NOT NULL,
+    restaurant_rating DECIMAL(2,1) NOT NULL,
+    payment_method VARCHAR(30) NOT NULL,
+    order_status VARCHAR(30) NOT NULL
+);
+select* from orders;
+-- Q1 find all orders placed from hyderabad,cheannai,and pune
+ select * from orders
+ where city not in('hyderabad','chennai','pune');
+-- Q2 find all orders where the food category is biryani,pizza, or chinese
+select * from orders
+where food_category not in('biryani','pizza','chinese');
+-- in operator
+select * from orders
+where food_category in('biryani','pizza','chinese');
+-- Q7 find all orders where the order value is between 300 and 700
+select *from orders
+where order_value between 300 and 700;
+-- not between
+select *from orders
+where order_value not between 300 and 700;
+-- Q8 find all orders where the delivery distance is between 3 km and 7 km
+select *from orders
+where distance_km between 3 and 7;
+select *from orders
+where distance_km  not between 3 and 7;
+-- Q9 find all orders the customer age is between 20 and 25
+select *from orders
+where customer_age between 20 and 25;
+-- not between
+select *from orders
+where customer_age not  between 20 and 25;
+--  find all orders where the delivery time is between 20 and 40
+-- between
+select *from orders
+where delivery_time_min between 20 and 40;
+-- not  between
+select *from orders
+where delivery_time_min not  between 20 and 40;
+-- Q14 find all customers whose names start with the letter a.
+select customer_name from orders
+where customer_name like'a%';
+-- ends with
+select customer_name from orders
+where customer_name like'%a';
+--  Q15 find all customers whose names start with the letter s.
+select customer_name from orders
+where customer_name like'S%';
+
+-- Q 17 CONTAIN THE CHARACTERS 'SH'
+select customer_name from orders
+where customer_name like'%SH%';
+
+-- Q 18 RESTAURANTS WHOSE NAMES START WITH S.
+select customer_name from orders
+where customer_name like'_S%';
+
+ -- Q19 RESTAURANTS WHOSE NAMES COONTAIN THE WORD 'FOOD'
+ select customer_name from orders
+where RESTAURANT like'%FOOD%';
+
+-- Q 20 FIND ALL CUSTOMERS WHOSE NAMES HAVE A AS THE SECOND CHARACTER
+select customer_name from orders
+where customer_name like'_A%';
+
+select CITY from orders;
+SELECT CUSTOMER_NAME FROM ORDERS;
+
+
+-- Q21 FIND ALL CUSTOMERS WHOSE NAMES START WITH A AND ARE FROM HYDERABAD
+select customer_name,CITY from orders
+where customer_name like'a%' AND CITY='HYDERABAD';
+
+-- Q22 DISPLAY ALL THE DIFFERENT CITIS FROM HICH ORDERS WERE PLACED.
+ select distinct city from orders;
+ -- multiple columns
+ select distinct city,food_category from orders;
+ 
+ -- q23 different food categories available
+ select distinct food_category from orders;
+ 
+ -- Q24 different payment methods used
+ select distinct payment_method from orders;
+ 
+ -- Q25 different restaurants available.
+ select distinct order_status from orders;
+
+
+ -- Q27 different food categories available in hyderabad.
+ select distinct food_category from orders
+ where city='hyderabad';
+ 
+ -- 29 display all orders from lowest order value to highest order value.
+ select * from orders
+ order by order_value;
+ 
+  select * from orders
+ order by order_value desc;
+ 
+ -- Q32 display all orders from highest restaurant rating to lowest rating.
+ select * from orders
+ order by restaurant_rating desc;
+ 
+ -- Q33  fastest delivery time to slowest delivery time.
+  select * from orders
+ order by delivery_time_min desc;
+ 
+ -- Q36 display the 5 highest-value orders.
+  select * from orders
+ order by order_value desc
+ limit 5;
+ 
+  select * from orders
+ order by order_value desc
+ limit  5 offset 2;
+ 
+ -- Q 36 display the 5 higest-value orders
+ -- Q37 display the 10 lowest-value orders.
+  select orders_value from orders
+  order by order_value
+  limit 10;
+  
+   -- Q37 display the 6 higest-value orders from hyderabad
+   select order_value,city from orders
+   where city='hyderabad'
+   order by order_value desc
+   limit 1 offset 4;
+   select * from orders;
+    
+ 
+ 
+ 
+
+
+
