@@ -1,0 +1,96 @@
+CREATE DATABASE tfi_database;
+USE tfi_database;
+CREATE TABLE  movies (
+    movie_id INT,
+    title VARCHAR(100),
+    release_date DATE,
+    language VARCHAR(30),
+    genre VARCHAR(50),
+    budget DECIMAL(12,2),
+    box_office DECIMAL(12,2),
+    rating DECIMAL(3,1)
+);
+SHOW TABLES;
+CREATE TABLE actors (
+    actor_id INT,
+    actor_name VARCHAR(100),
+    date_of_birth DATE,
+    debut_year YEAR
+);
+SHOW TABLES;
+CREATE TABLE directors (
+    director_id INT,
+    director_name VARCHAR(100),
+    date_of_birth DATE,
+    debut_year YEAR
+);
+SHOW TABLES;
+CREATE TABLE producers (
+    producer_id INT,
+    producer_name VARCHAR(100),
+    production_house VARCHAR(100)
+);
+SHOW TABLES;
+CREATE TABLE genres (
+    genre_id INT,
+    genre_name VARCHAR(50),
+    description VARCHAR(200)
+);
+SHOW TABLES;
+
+-- Q1
+ALTER TABLE MOVIES
+ADD COLUMN RUNTIME_MINUTES INT;
+SHOW TABLES;
+
+-- Q2 Add the following column to actors:
+ -- phone → VARCHAR(15)
+ ALTER TABLE ACTORS
+ ADD COLUMN PHONE VARCHAR(15);
+ SHOW TABLES;
+ 
+-- Q3
+alter table movies
+rename column movie_language to language;
+describe movies;
+
+ -- Q4 
+ alter table movies
+ modify column rating decimal(4,2);
+ 
+ -- Q5
+ ALTER TABLE GENRES
+ DROP COLUMN DESCRIPTION;
+ 
+ -- Q6
+ ALTER TABLE DIRECTORS
+ ADD COLUMN AWARDS_COUNT INT;
+ 
+ -- RENAME TABLES (PART 4)
+ -- ACTORS
+ RENAME TABLE ACTORS TO TFI_ACTORS;
+ -- DIRECTORS
+ RENAME TABLE DIRECTORS TO TFI_DIRECTORS;
+ 
+-- TRUNCATE VS DROP (PART 5)
+CREATE TEMPORARY TABLE TEST_MOVIES(
+MOVIE_ID INT,
+TITLE VARCHAR(100));
+TRUNCATE TABLE TEST_MOVIES;
+DROP TABLE TEST_MOVIES;
+
+-- CHALLENGE QUENTIONS
+RENAME TABLE MOVIE_DETAILS TO MOVIES;
+ 
+ ALTER TABLE MOVIES
+ ADD COLUMN MUSIC_DIRECTOR VARCHAR(100);
+ 
+ ALTER TABLE TFI_ACTORS
+ DROP COLUMN PHONE;
+ 
+DROP TABLE TEST_MOVIES;
+ 
+ 
+
+
+
