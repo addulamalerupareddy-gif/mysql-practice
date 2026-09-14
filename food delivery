@@ -1,0 +1,364 @@
+CREATE DATABASE IF NOT EXISTS food_delivery_db;
+USE food_delivery_db;
+CREATE TABLE orders (
+    order_id INT PRIMARY KEY,
+    customer_name VARCHAR(100) NOT NULL,
+    city VARCHAR(50) NOT NULL,
+    restaurant VARCHAR(100) NOT NULL,
+    food_category VARCHAR(50) NOT NULL,
+    order_value DECIMAL(10,2) NOT NULL,
+    delivery_fee DECIMAL(10,2) NOT NULL,
+    distance_km DECIMAL(5,2) NOT NULL,
+    customer_age INT NOT NULL,
+    delivery_time_min INT NOT NULL,
+    restaurant_rating DECIMAL(2,1) NOT NULL,
+    payment_method VARCHAR(30) NOT NULL,
+    order_status VARCHAR(30) NOT NULL
+);
+select * from orders;
+ -- q1 Display all records from the orders table.
+ select * from orders;
+ 
+ -- Q2 Display only the customer name, city, and restaurant.
+ SELECT CUSTOMER_NAME,CITY,RESTAURANT
+ FROM ORDERS;
+ 
+ -- Q3Display the restaurant, food category, and order value.
+select  restaurant,food_category,order_value from orders;
+
+-- Q4 Display customer name, order value, and delivery fee.
+ select customer_name,order_value,delivery_fee from orders;
+ 
+ -- Q5 Find all orders placed from Hyderabad.
+SELECT * FROM ORDERS
+WHERE CITY='HYDERABAD';
+
+-- Q6 Find all orders where the order value is greater than ₹500.
+SELECT * FROM ORDERS
+WHERE ORDER_VALUE >500;
+
+-- Q7 Find all orders where the delivery distance is less than 5 km.
+SELECT * FROM ORDERS
+WHERE DISTANCE_KM <5;
+
+-- Q8 Find all orders where the customer age is greater than or equal to 25.
+SELECT * FROM ORDERS
+WHERE CUSTOMER_AGE> 25;
+
+-- Q9 Find all orders where the restaurant rating is less than 4.0.
+SELECT * FROM ORDERS
+WHERE RESTAURANT_RATING <4.0;
+
+-- Q10 Find all orders where the order status is 'Delivered'.
+SELECT * FROM ORDERS
+WHERE ORDER_STATUS ='DELIVERED';
+
+-- Q11 Find all orders where the order value is exactly ₹300.
+SELECT * FROM ORDERS
+WHERE ORDER_VALUE=300;
+
+-- Q12 Find all orders where the order value is not ₹300.
+SELECT * FROM ORDERS
+WHERE ORDER_VALUE!=300;
+
+-- Q13 Display the customer name and the total amount paid.
+-- Total Amount = order_value + delivery_fee
+SELECT CUSTOMER_NAME,
+ORDER_VALUE + DELIVERY_FEE AS
+ TOTAL_AMOUNT_PAID
+ FROM ORDERS;
+ 
+ -- Q14 Display the restaurant and the order value after applying a 10% discount.
+ SELECT RESTAURANT,ORDER_VALUE -(ORDER_VALUE * 0.10) AS DISCOUNTED_ORDER_VALUE FROM ORDERS;
+ 
+ -- Q15 Display the customer name and the order value after adding a ₹50 service charge.
+ SELECT CUSTOMER_NAME,ORDER_VALUE +50 AS
+ ORDER_VALUE_WITH_SERVICE_CHARGE
+ FROM ORDERS;
+ 
+ -- Q16Display the customer name and the delivery cost per kilometre.
+-- Delivery Fee ÷ Distance
+SELECT CUSTOMER_NAME,
+DELIVERY_FEE / 
+DISTANCE_KM AS
+DELIVERY_COST_PER_KM
+FROM ORDERS;
+
+-- Q17 Display the customer name and order value after a ₹100 discount.
+SELECT CUSTOMER_NAME,ORDER_VALUE -100 AS DISCOUNTED_ORDER_VALUE FROM ORDERS;
+
+-- Q18 Find orders where the order value is greater than ₹500 AND the delivery distance is less than 5 km.
+SELECT * FROM ORDERS
+WHERE ORDER_VALUE >500
+AND DISTANCE_KM < 5;
+
+-- Q19 Find orders where the customer is older than 25 AND the order value is greater than ₹400 AND the restaurant rating is greater than 4.0.
+SELECT * FROM ORDERS
+WHERE CUSTOMER_AGE >25
+AND ORDER_VALUE>400
+AND RESTAURANT_RATING >4.0;
+
+-- Q20 Find orders where the order value is greater than ₹800 OR the delivery fee is greater than ₹50.
+SELECT * FROM ORDERS
+WHERE ORDER_VALUE >800
+OR DELIVERY_FEE > 50;
+
+ -- Q21 Find orders from Hyderabad OR Bengaluru OR Chennai.
+ SELECT * FROM ORDERS
+ WHERE CITY='HYDERABAD'
+ OR CITY='BENGALURU'
+ OR CITY='CHENNAI';
+ 
+ -- Q22 Find orders where the delivery time is greater than 40 minutes AND the restaurant rating is less than 4.0.
+ SELECT * FROM ORDERS
+ WHERE DELIVERY_TIME_MIN >40
+ AND RESTAURANT_RATING <4.0;
+ 
+ -- Q23 Find orders where the order value is less than ₹300 OR the delivery distance is greater than 8 km OR the delivery fee is greater than ₹60.
+ SELECT * FROM ORDERS
+ WHERE ORDER_VALUE <300
+ OR DISTANCE_KM >8
+ OR DELIVERY_FEE >60;
+ 
+ -- Q24 Find orders where the customer is younger than 25 AND the order status is 'Delivered' AND the order value is greater than ₹500.
+SELECT * FROM ORDERS
+WHERE CUSTOMER_AGE <25
+AND ORDER_STATUS='DELIVERED'
+AND ORDER_VALUE>500;
+
+-- Q25 Find orders where the food category is 'Biryani' OR 'Pizza', and the order value is greater than ₹400.
+SELECT * FROM ORDERS
+WHERE (FOOD_CATEGORY='BIRYANI'
+OR FOOD_CATEGORY='PIZZA')
+AND ORDER_VALUE>400;
+
+-- Q26 Find orders that are NOT from Hyderabad and have a restaurant rating greater than 4.0.
+SELECT * FROM ORDERS
+WHERE CITY <> 'HYDERABAD'
+AND RESTAURANT_RATING> 4.0;
+
+-- Q27 Find orders where the customer age is greater than 25 AND either the order value is greater than ₹700 OR the restaurant rating is greater than 4.5.
+SELECT * FROM ORDERS
+WHERE CUSTOMER_AGE >25
+AND ORDER_VALUE >700
+OR RESTAURANT_RATING >4.5;
+
+-- Q28 City is Hyderabad
+-- AND order value is greater than ₹500
+-- AND delivery time is less than 40 minutes
+-- AND restaurant rating is greater than 4.0
+SELECT * FROM ORDERS
+ WHERE ORDER_VALUE>500
+  AND DELIVERY_TIME_MIN <40
+  AND RESTAURANT_RATING >4.0;
+  
+  -- Q29 Order value is greater than ₹500
+-- AND delivery distance is less than 6 km
+-- AND either:
+-- restaurant rating is greater than 4.5
+-- OR delivery time is less than 30 minutes
+SELECT * FROM ORDERS
+WHERE ORDER_VALUE>500
+AND DISTANCE_KM <6
+AND RESTAURANT_RATING >4.5
+OR DELIVERY_TIME_MIN <30;
+
+-- Q30Customer age is greater than 25
+-- AND city is Hyderabad OR Bengaluru
+-- AND order value is greater than ₹500
+-- AND delivery time is less than 45 minutes
+ -- Think carefully about the brackets () when combining AND and OR.
+SELECT * FROM ORDERS
+WHERE CUSTOMER_AGE>25
+AND (CITY='HYDERABAD' OR CITY='BENGALURU')
+AND ORDER_VALUE>500
+AND DELIVERY_TIME_MIN <45;EATE DATABASE IF NOT EXISTS food_delivery_db;
+USE food_delivery_db;
+CREATE TABLE orders (
+    order_id INT PRIMARY KEY,
+    customer_name VARCHAR(100) NOT NULL,
+    city VARCHAR(50) NOT NULL,
+    restaurant VARCHAR(100) NOT NULL,
+    food_category VARCHAR(50) NOT NULL,
+    order_value DECIMAL(10,2) NOT NULL,
+    delivery_fee DECIMAL(10,2) NOT NULL,
+    distance_km DECIMAL(5,2) NOT NULL,
+    customer_age INT NOT NULL,
+    delivery_time_min INT NOT NULL,
+    restaurant_rating DECIMAL(2,1) NOT NULL,
+    payment_method VARCHAR(30) NOT NULL,
+    order_status VARCHAR(30) NOT NULL
+);
+select * from orders;
+ -- q1 Display all records from the orders table.
+ select * from orders;
+ 
+ -- Q2 Display only the customer name, city, and restaurant.
+ SELECT CUSTOMER_NAME,CITY,RESTAURANT
+ FROM ORDERS;
+ 
+ -- Q3Display the restaurant, food category, and order value.
+select  restaurant,food_category,order_value from orders;
+
+-- Q4 Display customer name, order value, and delivery fee.
+ select customer_name,order_value,delivery_fee from orders;
+ 
+ -- Q5 Find all orders placed from Hyderabad.
+SELECT * FROM ORDERS
+WHERE CITY='HYDERABAD';
+
+-- Q6 Find all orders where the order value is greater than ₹500.
+SELECT * FROM ORDERS
+WHERE ORDER_VALUE >500;
+
+-- Q7 Find all orders where the delivery distance is less than 5 km.
+SELECT * FROM ORDERS
+WHERE DISTANCE_KM <5;
+
+-- Q8 Find all orders where the customer age is greater than or equal to 25.
+SELECT * FROM ORDERS
+WHERE CUSTOMER_AGE> 25;
+
+-- Q9 Find all orders where the restaurant rating is less than 4.0.
+SELECT * FROM ORDERS
+WHERE RESTAURANT_RATING <4.0;
+
+-- Q10 Find all orders where the order status is 'Delivered'.
+SELECT * FROM ORDERS
+WHERE ORDER_STATUS ='DELIVERED';
+
+-- Q11 Find all orders where the order value is exactly ₹300.
+SELECT * FROM ORDERS
+WHERE ORDER_VALUE=300;
+
+-- Q12 Find all orders where the order value is not ₹300.
+SELECT * FROM ORDERS
+WHERE ORDER_VALUE!=300;
+
+-- Q13 Display the customer name and the total amount paid.
+-- Total Amount = order_value + delivery_fee
+SELECT CUSTOMER_NAME,
+ORDER_VALUE + DELIVERY_FEE AS
+ TOTAL_AMOUNT_PAID
+ FROM ORDERS;
+ 
+ -- Q14 Display the restaurant and the order value after applying a 10% discount.
+ SELECT RESTAURANT,ORDER_VALUE -(ORDER_VALUE * 0.10) AS DISCOUNTED_ORDER_VALUE FROM ORDERS;
+ 
+ -- Q15 Display the customer name and the order value after adding a ₹50 service charge.
+ SELECT CUSTOMER_NAME,ORDER_VALUE +50 AS
+ ORDER_VALUE_WITH_SERVICE_CHARGE
+ FROM ORDERS;
+ 
+ -- Q16Display the customer name and the delivery cost per kilometre.
+-- Delivery Fee ÷ Distance
+SELECT CUSTOMER_NAME,
+DELIVERY_FEE / 
+DISTANCE_KM AS
+DELIVERY_COST_PER_KM
+FROM ORDERS;
+
+-- Q17 Display the customer name and order value after a ₹100 discount.
+SELECT CUSTOMER_NAME,ORDER_VALUE -100 AS DISCOUNTED_ORDER_VALUE FROM ORDERS;
+
+-- Q18 Find orders where the order value is greater than ₹500 AND the delivery distance is less than 5 km.
+SELECT * FROM ORDERS
+WHERE ORDER_VALUE >500
+AND DISTANCE_KM < 5;
+
+-- Q19 Find orders where the customer is older than 25 AND the order value is greater than ₹400 AND the restaurant rating is greater than 4.0.
+SELECT * FROM ORDERS
+WHERE CUSTOMER_AGE >25
+AND ORDER_VALUE>400
+AND RESTAURANT_RATING >4.0;
+
+-- Q20 Find orders where the order value is greater than ₹800 OR the delivery fee is greater than ₹50.
+SELECT * FROM ORDERS
+WHERE ORDER_VALUE >800
+OR DELIVERY_FEE > 50;
+
+ -- Q21 Find orders from Hyderabad OR Bengaluru OR Chennai.
+ SELECT * FROM ORDERS
+ WHERE CITY='HYDERABAD'
+ OR CITY='BENGALURU'
+ OR CITY='CHENNAI';
+ 
+ -- Q22 Find orders where the delivery time is greater than 40 minutes AND the restaurant rating is less than 4.0.
+ SELECT * FROM ORDERS
+ WHERE DELIVERY_TIME_MIN >40
+ AND RESTAURANT_RATING <4.0;
+ 
+ -- Q23 Find orders where the order value is less than ₹300 OR the delivery distance is greater than 8 km OR the delivery fee is greater than ₹60.
+ SELECT * FROM ORDERS
+ WHERE ORDER_VALUE <300
+ OR DISTANCE_KM >8
+ OR DELIVERY_FEE >60;
+ 
+ -- Q24 Find orders where the customer is younger than 25 AND the order status is 'Delivered' AND the order value is greater than ₹500.
+SELECT * FROM ORDERS
+WHERE CUSTOMER_AGE <25
+AND ORDER_STATUS='DELIVERED'
+AND ORDER_VALUE>500;
+
+-- Q25 Find orders where the food category is 'Biryani' OR 'Pizza', and the order value is greater than ₹400.
+SELECT * FROM ORDERS
+WHERE (FOOD_CATEGORY='BIRYANI'
+OR FOOD_CATEGORY='PIZZA')
+AND ORDER_VALUE>400;
+
+-- Q26 Find orders that are NOT from Hyderabad and have a restaurant rating greater than 4.0.
+SELECT * FROM ORDERS
+WHERE CITY <> 'HYDERABAD'
+AND RESTAURANT_RATING> 4.0;
+
+-- Q27 Find orders where the customer age is greater than 25 AND either the order value is greater than ₹700 OR the restaurant rating is greater than 4.5.
+SELECT * FROM ORDERS
+WHERE CUSTOMER_AGE >25
+AND ORDER_VALUE >700
+OR RESTAURANT_RATING >4.5;
+
+-- Q28 City is Hyderabad
+-- AND order value is greater than ₹500
+-- AND delivery time is less than 40 minutes
+-- AND restaurant rating is greater than 4.0
+SELECT * FROM ORDERS
+ WHERE ORDER_VALUE>500
+  AND DELIVERY_TIME_MIN <40
+  AND RESTAURANT_RATING >4.0;
+  
+  -- Q29 Order value is greater than ₹500
+-- AND delivery distance is less than 6 km
+-- AND either:
+-- restaurant rating is greater than 4.5
+-- OR delivery time is less than 30 minutes
+SELECT * FROM ORDERS
+WHERE ORDER_VALUE>500
+AND DISTANCE_KM <6
+AND RESTAURANT_RATING >4.5
+OR DELIVERY_TIME_MIN <30;
+
+-- Q30Customer age is greater than 25
+-- AND city is Hyderabad OR Bengaluru
+-- AND order value is greater than ₹500
+-- AND delivery time is less than 45 minutes
+ -- Think carefully about the brackets () when combining AND and OR.
+SELECT * FROM ORDERS
+WHERE CUSTOMER_AGE>25
+AND (CITY='HYDERABAD' OR CITY='BENGALURU')
+AND ORDER_VALUE>500
+AND DELIVERY_TIME_MIN <45;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
