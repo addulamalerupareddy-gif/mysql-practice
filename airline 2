@@ -1,0 +1,164 @@
+REATE DATABASE IF NOT EXISTS airline_db;
+USE airline_db;
+CREATE TABLE flights (
+    booking_id INT PRIMARY KEY,
+    passenger_name VARCHAR(100) NOT NULL,
+    source_city VARCHAR(50) NOT NULL,
+    destination_city VARCHAR(50) NOT NULL,
+    airline VARCHAR(50) NOT NULL,
+    flight_class VARCHAR(20) NOT NULL,
+    ticket_price DECIMAL(10,2) NOT NULL,
+    passenger_age INT NOT NULL,
+    flight_duration_hours DECIMAL(4,1) NOT NULL,
+    baggage_kg DECIMAL(5,1) NOT NULL,
+    booking_status VARCHAR(20) NOT NULL,
+    payment_method VARCHAR(30) NOT NULL,
+    seat_number VARCHAR(10) NOT NULL
+);
+select * from flights;
+-- 1 Display the passenger name, source city, destination city and ticket price for all bookings.
+SELECT passenger_name, source_city, destination_city, ticket_price
+FROM flights;
+
+
+-- 2 Find all bookings where the passenger is travelling from Hyderabad to Mumbai.
+select * from flights
+where source_city='hyderabad' and destination_city='mumbai';
+
+-- Q3 Find bookings where the source city is Hyderabad, Bengaluru or Chennai.
+select * from flights
+where source_city in('hyderabad','bengaluru','chennai');
+
+-- Q4 Find bookings where the destination city is Delhi, Mumbai or Kolkata and the ticket price is greater than ₹10,000.
+select * from flights
+where destination_city in('delhi','mumbai','kolkata')
+and  ticket_price>10000;
+
+-- Q5 Find passengers whose names start with the letter A.
+select * from flights
+where passenger_name like'a%';
+
+-- Q6 Find bookings where the ticket price is between ₹5,000 and ₹15,000.
+select * from flights
+where ticket_price between 5000 and 15000;
+
+-- q7 Find passengers whose age is greater than 25 and whose flight class is Business.
+select * from flights
+where passenger_age > 25
+and flight_class='business';
+
+-- Q8 Find bookings where the baggage weight is greater than 15 kg OR the ticket price is greater than ₹20,000.
+select * from flights
+ where baggage_kg > 15
+ or ticket_price > 20000;
+ 
+ -- Q9 Display all the different source cities available in the dataset.
+ select distinct source_city from flights;
+ 
+ -- Q10 Display all the different airline names available.
+select distinct airline from flights;
+
+-- Q11 Find passengers whose names contain "an" and whose ticket price is less than ₹10,000.
+select * from flights
+where passenger_name like '%an%'
+and ticket_price < 10000;
+
+-- Q12Find bookings where the flight duration is between 2 and 5 hours and the ticket price is less than ₹12,000.
+select * from flights
+where flight_duration_hours between 2 and 5
+and ticket_price <12000;
+
+-- Q13 Find bookings that are not from Hyderabad, Bengaluru or Chennai.
+select * from flights
+where source_city not in('hyderabad','bengaluru','chennai');
+
+-- Q14 Find bookings where the payment method is UPI or Credit Card, and the booking status is Confirmed.
+select * from flights
+where payment_method in('upi','credit card')
+and booking_status='confirmed';
+ 
+-- Q15 Display the passenger name and the ticket price after applying a 10% discount.
+select passenger_name,ticket_price * 0.90 as discounted_price from flights;
+
+-- Q16Display the passenger name and the total luggage allowed amount, assuming the airline provides an additional 5 kg allowance over the recorded baggage.
+select  passenger_name,baggage_kg +5 as otal_luggage_allowed from flights;
+
+-- Q17 Find bookings where the ticket price after a 10% discount is less than ₹8,000.
+select * from flights
+where ticket_price *0.90<8000;
+
+-- Q18 Find passengers who are between 20 and 30 years old, travelling in Economy class, and whose ticket price is less than ₹10,000.
+select * from flights
+where passenger_age between 20 and 30
+and flight_class='economy'
+and ticket_price<10000;
+
+-- Q20 Find bookings where the source city is Hyderabad OR Bengaluru, and the flight duration is greater than 3 hours.
+select * from flights
+where destination_city not in('delhi','mumbai')
+and ticket_price > 7000;
+
+-- Q19 Find bookings where the source city is Hyderabad OR Bengaluru, and the flight duration is greater than 3 hours.
+select * from flights
+where source_city in('hyderabad','bengaluru')
+and flight_duration_hours >3;
+
+-- Q21 Display all bookings sorted by ticket price from highest to lowest.
+select * from flights
+order by ticket_price desc;
+
+-- Q22Display all bookings sorted by passenger age from youngest to oldest.
+select * from flights
+ORDER BY PASSENGER_AGE ASC;
+
+-- Q23 Display bookings sorted by source city alphabetically, and within each city, sort by ticket price from highest to lowest.
+select * from flights
+ORDER BY SOURCE_CITY,TICKET_PRICE DESC;
+
+-- Q24 Display the 5 most expensive bookings.
+select * from flights
+ORDER BY TICKET_PRICE DESC
+LIMIT 5;
+
+-- Q25Display the 5 cheapest bookings.
+select * from flights
+ORDER BY TICKET_PRICE
+LIMIT 5;
+
+-- Q26 FIND THE 5 LONGEST FLIGHTS
+select * from flights
+WHERE SOURCE_CITY='HYDERABAD'
+ORDER BY TICKET_PRICE DESC
+LIMIT 5;
+
+-- Q27 Find bookings from Hyderabad, sort them by ticket price from highest to lowest, and display only the top 5.
+select * from flights
+WHERE SOURCE_CITY='HYDERABAD'
+ORDER BY TICKET_PRICE DESC
+LIMIT 5; 
+
+-- Q28 Find bookings where the ticket price is between ₹5,000 and ₹20,000, sort them by ticket price from highest to lowest, skip the first 5 and display the next 5.
+select * from flights
+WHERE TICKET_PRICE BETWEEN 5000 AND 20000
+ORDER BY TICKET_PRICE DESC
+LIMIT 5 OFFSET 5;
+
+-- Q29Find the different destination cities for bookings made by passengers whose names start with A.
+select DESTINATION_CITY FROM FLIGHTS
+WHERE PASSENGER_NAME LIKE'A%';
+
+-- Q30 .  Final Challenge
+-- Find bookings where:
+-- Source city is Hyderabad, Bengaluru or Chennai
+-- Destination city is Mumbai, Delhi or Kolkata
+-- Ticket price is between ₹5,000 and ₹20,000
+-- Passenger age is greater than 25
+-- Sort the results by ticket price from highest to lowest and display only the top 5
+select * from flights
+WHERE SOURCE_CITY IN ('HYDERABAD','bengaluru','cheannai')
+and destination_city in('mumbai','delhi','kolkata')
+and ticket_price between 5000 and 20000
+and passenger_age >25
+order by ticket_price desc
+limit 5;
+
