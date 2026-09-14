@@ -1,0 +1,135 @@
+CREATE DATABASE CineWorld;
+USE CineWorld;
+CREATE TABLE Theatres (
+    Theatre_ID INT PRIMARY KEY,
+    Theatre_Name VARCHAR(100) NOT NULL,
+    City VARCHAR(50) NOT NULL,
+    Number_of_Screens INT CHECK (Number_of_Screens > 0)
+);
+CREATE TABLE Movies (
+    Movie_ID INT PRIMARY KEY,
+    Movie_Title VARCHAR(100) NOT NULL,
+    Genre VARCHAR(50) NOT NULL,
+    Duration INT CHECK (Duration > 0),
+    Language VARCHAR(50) NOT NULL
+);
+CREATE TABLE Shows (
+    Show_ID INT PRIMARY KEY,
+    Movie_ID INT NOT NULL,
+    Theatre_ID INT NOT NULL,
+    Show_Date DATE NOT NULL,
+    Show_Time TIME NOT NULL,
+    Ticket_Price DECIMAL(10,2) NOT NULL CHECK (Ticket_Price >= 0),
+
+    FOREIGN KEY (Movie_ID) REFERENCES Movies(Movie_ID),
+    FOREIGN KEY (Theatre_ID) REFERENCES Theatres(Theatre_ID)
+);
+CREATE TABLE Customers (
+    Customer_ID INT PRIMARY KEY,
+    Customer_Name VARCHAR(100) NOT NULL,
+    Email VARCHAR(100) NOT NULL UNIQUE,
+    Phone_Number VARCHAR(15) NOT NULL UNIQUE
+);
+CREATE TABLE Bookings (
+    Booking_ID INT PRIMARY KEY,
+    Customer_ID INT NOT NULL,
+    Show_ID INT NOT NULL,
+    Number_of_Seats INT NOT NULL CHECK (Number_of_Seats > 0),
+    Booking_Date DATE DEFAULT (CURRENT_DATE),
+    Total_Amount DECIMAL(10,2) NOT NULL CHECK (Total_Amount >= 0),
+
+    FOREIGN KEY (Customer_ID) REFERENCES Customers(Customer_ID),
+    FOREIGN KEY (Show_ID) REFERENCES Shows(Show_ID)
+);
+CREATE DATABASE cineworld_db;
+USE cineworld_db;
+
+CREATE TABLE Theatres (
+    Theatre_ID INT PRIMARY KEY,
+    Theatre_Name VARCHAR(100) NOT NULL,
+    City VARCHAR(50) NOT NULL,
+    Number_of_Screens INT NOT NULL CHECK (Number_of_Screens > 0)
+);
+
+CREATE TABLE Movies (
+    Movie_ID INT PRIMARY KEY,
+    Movie_Title VARCHAR(100) NOT NULL,
+    Genre VARCHAR(50) NOT NULL,
+    Duration INT NOT NULL CHECK (Duration > 0),
+    Language VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE Shows (
+    Show_ID INT PRIMARY KEY,
+    Movie_ID INT NOT NULL,
+    Theatre_ID INT NOT NULL,
+    Show_Date DATE NOT NULL,
+    Show_Time TIME NOT NULL,
+    Ticket_Price DECIMAL(10,2) NOT NULL CHECK (Ticket_Price >= 0),
+
+    FOREIGN KEY (Movie_ID) REFERENCES Movies(Movie_ID),
+    FOREIGN KEY (Theatre_ID) REFERENCES Theatres(Theatre_ID)
+);
+
+CREATE TABLE Customers (
+    Customer_ID INT PRIMARY KEY,
+    Customer_Name VARCHAR(100) NOT NULL,
+    Email VARCHAR(100) NOT NULL UNIQUE,
+    Phone_Number VARCHAR(15) NOT NULL UNIQUE
+);
+
+CREATE TABLE Bookings (
+    Booking_ID INT PRIMARY KEY,
+    Customer_ID INT NOT NULL,
+    Show_ID INT NOT NULL,
+    Number_of_Seats INT NOT NULL CHECK (Number_of_Seats > 0),
+    Booking_Date DATE DEFAULT (CURRENT_DATE),
+    Total_Amount DECIMAL(10,2) NOT NULL CHECK (Total_Amount >= 0),
+
+    FOREIGN KEY (Customer_ID) REFERENCES Customers(Customer_ID),
+    FOREIGN KEY (Show_ID) REFERENCES Shows(Show_ID)
+);
+
+INSERT INTO Theatres
+VALUES
+(1, 'PVR Cinemas', 'Hyderabad', 5),
+(2, 'INOX', 'Bengaluru', 4),
+(3, 'Cinepolis', 'Chennai', 6),
+(4, 'Asian Cinemas', 'Vijayawada', 3);
+
+INSERT INTO Movies
+VALUES
+(101, 'RRR', 'Action', 182, 'Telugu'),
+(102, 'Pushpa 2', 'Action', 200, 'Telugu'),
+(103, 'Leo', 'Thriller', 164, 'Tamil'),
+(104, 'Jawan', 'Action', 169, 'Hindi');
+
+INSERT INTO Shows
+VALUES
+(1001, 101, 1, '2026-09-05', '10:00:00', 250.00),
+(1002, 102, 1, '2026-09-05', '14:00:00', 300.00),
+(1003, 103, 2, '2026-09-06', '18:00:00', 280.00),
+(1004, 104, 3, '2026-09-06', '20:00:00', 220.00),
+(1005, 101, 4, '2026-09-07', '16:00:00', 200.00);
+
+INSERT INTO Customers
+VALUES
+(1, 'Ritika Shah', 'ritika@gmail.com', '9812345670'),
+(2, 'Karan Oberoi', 'karan@gmail.com', '9823456781'),
+(3, 'Priya Reddy', 'priya@gmail.com', '9834567892'),
+(4, 'Rahul Kumar', 'rahul@gmail.com', '9845678903');
+
+INSERT INTO Bookings
+(Booking_ID, Customer_ID, Show_ID, Number_of_Seats, Total_Amount)
+VALUES
+(5001, 1, 1001, 2, 500.00),
+(5002, 2, 1002, 3, 900.00),
+(5003, 3, 1003, 2, 560.00),
+(5004, 4, 1004, 4, 880.00),
+(5005, 1, 1005, 2, 400.00);
+
+INSERT INTO Bookings
+(Booking_ID, Customer_ID, Show_ID, Number_of_Seats, Total_Amount)
+VALUES
+(5006, 999, 1001, 2, 500.00);
+
