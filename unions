@@ -1,0 +1,398 @@
+use techmart_db;
+show tables;
+create table discounts(
+discount_id int primary key,
+discount_per varchar(10)
+);
+
+insert into discounts values(1,"10%"),(2,"20%"),(3,"30%");
+
+select * from discounts;
+
+-- combination of product names with discounts
+
+select p.product_name,d.discount_per
+from products p cross join discounts d;
+
+CREATE DATABASE IF NOT EXISTS shopsphere_db;
+
+USE shopsphere_db;
+
+
+
+-- 1. ONLINE SALES
+
+DROP TABLE IF EXISTS online_sales;
+
+CREATE TABLE online_sales (
+    sale_id INT PRIMARY KEY,
+    customer_name VARCHAR(100),
+    email VARCHAR(100),
+    city VARCHAR(50),
+    product VARCHAR(100),
+    category VARCHAR(50),
+    quantity INT,
+    amount DECIMAL(10,2),
+    order_date VARCHAR(20),
+    discount DECIMAL(5,2),
+    status VARCHAR(20)
+);
+
+
+INSERT INTO online_sales
+(sale_id, customer_name, email, city, product, category,
+ quantity, amount, order_date, discount, status)
+VALUES
+
+(101, 'Rahul Sharma', 'rahul@gmail.com', 'Hyderabad',
+ 'Laptop', 'Electronics', 1, 65000, '15-08-2026', 10, 'Delivered'),
+
+(102, 'Priya Reddy', 'priya@gmail.com', 'Bengaluru',
+ 'Headphones', 'Electronics', 2, 5000, '18-08-2026', 5, 'Delivered'),
+
+(103, 'Arjun Kumar', 'arjun@gmail.com', 'Chennai',
+ 'Office Chair', 'Furniture', 1, 8500, '20-08-2026', 0, 'Pending'),
+
+(104, 'Sneha Rao', 'sneha@gmail.com', 'Hyderabad',
+ 'Keyboard', 'Electronics', 3, 4500, '22-08-2026', 8, 'Delivered'),
+
+(105, 'Vikram Singh', 'vikram@gmail.com', 'Mumbai',
+ 'Monitor', 'Electronics', 2, 30000, '25-08-2026', 12, 'Cancelled'),
+
+(106, 'Ananya Das', 'ananya@gmail.com', 'Delhi',
+ 'Desk', 'Furniture', 1, 12000, '27-08-2026', 5, 'Delivered'),
+
+(107, 'Kiran Reddy', 'kiran@gmail.com', 'Hyderabad',
+ 'Mouse', 'Electronics', 4, 3200, '29-08-2026', 0, 'Delivered'),
+
+(108, 'Meera Nair', 'meera@gmail.com', 'Kochi',
+ 'Backpack', 'Accessories', 2, 4000, '30-08-2026', 15, 'Pending'); 
+ 
+ -- 2. STORE SALES
+
+
+DROP TABLE IF EXISTS store_sales;
+
+CREATE TABLE store_sales (
+    sale_id INT PRIMARY KEY,
+    customer_name VARCHAR(100),
+    email VARCHAR(100),
+    city VARCHAR(50),
+    product VARCHAR(100),
+    category VARCHAR(50),
+    quantity INT,
+    amount DECIMAL(10,2),
+    order_date VARCHAR(20),
+    discount DECIMAL(5,2),
+    status VARCHAR(20)
+);
+
+
+INSERT INTO store_sales
+(sale_id, customer_name, email, city, product, category,
+ quantity, amount, order_date, discount, status)
+VALUES
+
+(201, 'Rahul Sharma', 'rahul@gmail.com', 'Hyderabad',
+ 'Laptop Bag', 'Accessories', 1, 2500, '16-08-2026', 5, 'Delivered'),
+
+(202, 'Pooja Mehta', 'pooja@gmail.com', 'Pune',
+ 'Keyboard', 'Electronics', 2, 3000, '19-08-2026', 10, 'Delivered'),
+
+(203, 'Arjun Kumar', 'arjun@gmail.com', 'Chennai',
+ 'Desk', 'Furniture', 1, 11000, '21-08-2026', 5, 'Delivered'),
+
+(204, 'Rohan Verma', 'rohan@gmail.com', 'Mumbai',
+ 'Monitor', 'Electronics', 1, 16000, '23-08-2026', 8, 'Pending'),
+
+(205, 'Sneha Rao', 'sneha@gmail.com', 'Hyderabad',
+ 'Mouse', 'Electronics', 2, 1800, '24-08-2026', 0, 'Delivered'),
+
+(206, 'Neha Kapoor', 'neha@gmail.com', 'Delhi',
+ 'Office Chair', 'Furniture', 2, 17000, '26-08-2026', 10, 'Delivered'),
+
+(207, 'Kiran Reddy', 'kiran@gmail.com', 'Hyderabad',
+ 'Headphones', 'Electronics', 1, 2800, '28-08-2026', 5, 'Cancelled'),
+
+(208, 'Amit Joshi', 'amit@gmail.com', 'Pune',
+ 'Backpack', 'Accessories', 3, 6000, '31-08-2026', 12, 'Delivered');
+ show tables;
+ select * from online_sales;
+ select * from store_sales;
+ 
+ select * from online_sales
+ union
+ select * from store_sales;
+ 
+ -- Q1
+ select customer_name from online_sales
+ union 
+ select customer_name from store_sales;
+ 
+ 
+ -- Q2
+select customer_name from online_sales
+UNION ALL
+select customer_name from store_sales;
+
+-- Q3
+select product from online_sales
+UNION 
+select product from store_sales;
+ 
+ -- Q4
+select customer_name,city from online_sales
+UNION 
+select customer_name,city from store_sales;
+
+--  Q5
+select customer_name from online_sales
+UNION
+select customer_name from store_sales;
+
+-- Q6
+select upper from online_sales;
+select upper(customer_name) from online_sales;
+
+-- Q7
+select LOWER from online_sales;
+select LOWER(EMAIL) from online_sales;
+
+-- Q8
+ select length(customer_name) from online_sales;
+ 
+ -- Q9
+select concat_WS('-',customer_name,CITY) from online_sales;
+ 
+ -- Q10
+SELECT concat_ws(" | ",CUSTOMER_NAME,CITY,CATEGORY)
+FROM ONLINE_SALES;
+
+-- Q11
+SELECT LEFT(CUSTOMER_NAME,3) FROM ONLINE_SALES;
+
+-- Q12
+ SELECT RIGHT(EMAIL,4) FROM ONLINE_SALES;
+ 
+ -- Q13
+ SELECT LEFT(PRODUCT,3) FROM ONLINE_SALES;
+
+-- Q14
+ select email from online_sales;
+ select replace(email,'@gamil.com','@shopsphere')from online_sales;
+ 
+ -- Q15
+SELECT TRIM(CUSTOMER_NAME) FROM ONLINE_SALES;
+
+-- Q16
+ Select order_date from online_sales;
+ select order_date,(str_to_date(order_date,'%d-%m-%y')) from online_sales;
+ 
+ -- Q17
+ select sale_id,year(str_to_date(order_date,'%d-%m-%y')) from online_sales;
+ 
+ -- Q18
+  select sale_id,month(str_to_date(order_date,'%d-%m-%y')) from online_sales;
+
+  
+-- Q19
+ select sale_id,monthname(str_to_date(order_date,'%d-%m-%y')) from online_sales;
+ 
+ -- Q20
+  select sale_id,dayname(str_to_date(order_date,'%d-%m-%y')) from online_sales;
+  
+-- Q21
+ select sale_id,datediff('2026-6-1','2025-8-12') from online_sales;
+
+-- q22
+select order_date,curdate() from online_sales;
+
+-- Q23
+select order_date,now() from online_sales;
+
+-- conditional functions
+-- Q25
+select product,amount,if(amount >=15000,'high value','regular')
+as sale_TYPE from online_sales;
+
+--  Q26
+select product,amount,if(QUANTITY >=3,'BULK','NORMAL')
+as ORDER_TYPE from online_sales;
+
+-- Q27
+select amount-(amount*discount /100) as final_amount
+from online_sales;
+
+-- Q28
+select product,amount,discount,amount-(amount*discount /100) as final_amount
+from online_sales;
+
+-- Q29
+SELECT product, amount, quantity,
+       amount / quantity AS average_amount_per_item
+FROM ONLINE_sales;
+
+-- Q30
+SELECT product, amount, quantity,
+       ROUND(amount / quantity, 2) AS average_amount_per_item
+FROM online_sales;
+
+-- Q31
+SELECT product, quantity,
+       CASE
+           WHEN MOD(quantity, 2) = 0 THEN 'Even'
+           ELSE 'Odd'
+       END AS quantity_type
+FROM online_sales;
+
+-- Q32
+SELECT product, quantity,
+       POWER(quantity, 2) AS quantity_square
+FROM online_sales;
+
+-- Q33
+SELECT product, amount,
+       ABS(amount - 10000) AS absolute_difference
+FROM online_sales;
+
+-- Q34
+SELECT customer_name,
+       ROUND(amount) AS amount
+FROM online_sales;
+
+-- Q35
+SELECT customer_name, product, city, amount
+FROM online_sales
+
+UNION ALL
+
+SELECT customer_name, product, city, amount
+FROM store_sales;
+
+-- q36
+SELECT DISTINCT customer_name
+FROM (
+    SELECT customer_name, city
+    FROM online_sales
+
+    UNION ALL
+
+    SELECT customer_name, city
+    FROM store_sales
+) AS all_sales
+WHERE city = 'Hyderabad';
+
+-- Q37
+SELECT
+    UPPER(customer_name) AS customer_name,
+    LOWER(product) AS product,
+    MONTHNAME(STR_TO_DATE(order_date, '%Y-%m-%d')) AS month_name,
+    amount - (amount * discount / 100) AS final_amount
+FROM online_sales
+
+UNION ALL
+
+SELECT
+    UPPER(customer_name) AS customer_name,
+    LOWER(product) AS product,
+    MONTHNAME(STR_TO_DATE(order_date, '%Y-%m-%d')) AS month_name,
+    amount - (amount * discount / 100) AS final_amount
+FROM store_sales;
+
+-- Q38
+SELECT
+    month_name,
+    SUM(final_amount) AS total_final_revenue
+FROM (
+    SELECT
+        MONTHNAME(STR_TO_DATE(order_date, '%Y-%m-%d')) AS month_name,
+        amount - (amount * discount / 100) AS final_amount
+    FROM online_sales
+
+    UNION ALL
+
+    SELECT
+        MONTHNAME(STR_TO_DATE(order_date, '%Y-%m-%d')) AS month_name,
+        amount - (amount * discount / 100) AS final_amount
+    FROM store_sales
+) AS all_sales
+GROUP BY month_name;
+
+-- Q39
+SELECT
+    city,
+    SUM(final_amount) AS total_revenue
+FROM (
+    SELECT
+        city,
+        amount - (amount * discount / 100) AS final_amount
+    FROM online_sales
+
+    UNION ALL
+
+    SELECT
+        city,
+        amount - (amount * discount / 100) AS final_amount
+    FROM store_sales
+) AS all_sales
+GROUP BY city;
+
+-- q40
+SELECT
+    product,
+    SUM(final_amount) AS final_revenue
+FROM (
+    SELECT
+        product,
+        amount - (amount * discount / 100) AS final_amount
+    FROM online_sales
+
+    UNION ALL
+
+    SELECT
+        product,
+        amount - (amount * discount / 100) AS final_amount
+    FROM store_sales
+) AS all_sales
+GROUP BY product
+ORDER BY final_revenue DESC
+LIMIT 3;
+
+-- Q41
+SELECT
+    UPPER(customer_name) AS customer_name,
+    city,
+    product,
+    category,
+    MONTHNAME(STR_TO_DATE(order_date, '%Y-%m-%d')) AS month_name,
+    quantity,
+    amount AS original_amount,
+    discount,
+    amount - (amount * discount / 100) AS final_amount,
+    CASE
+        WHEN amount - (amount * discount / 100) >= 15000
+            THEN 'High Value'
+        ELSE 'Regular'
+    END AS sale_classification
+FROM online_sales
+
+UNION ALL
+
+SELECT
+    UPPER(customer_name) AS customer_name,
+    city,
+    product,
+    category,
+    MONTHNAME(STR_TO_DATE(order_date, '%Y-%m-%d')) AS month_name,
+    quantity,
+    amount AS original_amount,
+    discount,
+    amount - (amount * discount / 100) AS final_amount,
+    CASE
+        WHEN amount - (amount * discount / 100) >= 15000
+            THEN 'High Value'
+        ELSE 'Regular'
+    END AS sale_classification
+FROM store_sales
+
+ORDER BY final_amount DESC;
