@@ -1,0 +1,94 @@
+CREATE DATABASE IF NOT EXISTS airline_db;
+USE airline_db;
+CREATE TABLE flights (
+    booking_id INT PRIMARY KEY,
+    passenger_name VARCHAR(100) NOT NULL,
+    source_city VARCHAR(50) NOT NULL,
+    destination_city VARCHAR(50) NOT NULL,
+    airline VARCHAR(50) NOT NULL,
+    flight_class VARCHAR(20) NOT NULL,
+    ticket_price DECIMAL(10,2) NOT NULL,
+    passenger_age INT NOT NULL,
+    flight_duration_hours DECIMAL(4,1) NOT NULL,
+    baggage_kg DECIMAL(5,1) NOT NULL,
+    booking_status VARCHAR(20) NOT NULL,
+    payment_method VARCHAR(30) NOT NULL,
+    seat_number VARCHAR(10) NOT NULL
+);
+select * from flights;
+
+-- q1 how many bookings are present in the flights table
+select count(*)  as total_no_bookings from flights;
+
+select count(source_city)from flights;
+
+ -- q what is the total ticket revenue generated from all bookings
+  select sum(ticket_price) as total_revenue from flights;
+   
+   -- Q for business class bookings,find the number of bookings total revenue,and average ticket price
+   select count(*) as total_booking_business_class,
+   sum(ticket_price) as total_revenue,
+   avg(ticket_price) as avg_ticket_price
+   from flights
+   where flight_class='business';
+   
+   select distinct flight_class from flights;
+   
+   select distinct flight_class from flights;
+   select * from flights;
+   
+   -- Q FIND THE NUMBER OF BOOKINGS MADE THIURGH EACH AIRLINE
+   SELECT DISTINCT AIRLINE FROM FLIGHTS;
+   
+
+   SELECT AIRLINE,COUNT(*) AS TOTAL_BOOKINGS FROM FLIGHTS
+   GROUP BY AIRLINE;
+   
+-- Q8 FRO EVERY AIRLINE,DISPLAY
+-- NUMBER OF BOOKINGD
+-- TOTAL AVENUE
+-- AVERAGE TICKT PRICE
+-- CHEAPEST TICKET
+-- MOST EXPENSIVE TICKET
+SELECT COUNT(*) AS TOTAL_BOOKINS,
+ SUM(TICKET_PRICE) AS TOTAL_REVENUE,
+AVG(TICKET_PRICE) AS AVG_TICKET_PRICE FROM FLIGHTS WHERE FLIGHT_CLASS='BUSINESS';
+
+SELECT AIRLINE,COUNT(*) AS TOTAL_BOOKINGS FROM FLIGHTS
+GROUP BY AIRLINE
+HAVING TOTAL_BOOKINGS >15 ;
+
+SELECT AIRLINE,COUNT(*) AS TOTAL_CONFIRMED_BOOKINGS
+FROM FLIGHTS
+WHERE TICKET_PRICE > 5000 AND BOOKING_STATUS='CONFIRMED'
+GROUP BY AIRLINE
+HAVING TOTAL_CONFIRMED_BOOKINGS >10;
+
+SELECT AIRLINE,AVG(TICKET_PRICE) AS AVG_TICKET_PRICE
+FROM FLIGHTS
+WHERE PASSENGER_AGE BETWEEN 20 AND 35
+GROUP  BY AIRLINE
+HAVING AVG_TICKET_PRICE >12000;
+
+-- Q23
+SELECT PASSENGER_NAME,PASSENGER_AGE,CASE
+WHEN PASSENGER_AGE BETWEEN 18 AND 25 THEN 'YOUNG'
+WHEN PASSENGER_AGE BETWEEN 26 AND 35 THEN 'ADULT'
+ELSE 'SENIOR'
+END AS EGE_CATEGORY
+FROM FLIGHTS;
+
+-- Q24
+SELECT CASE
+WHEN PASSENGER_AGE BETWEEN 18 AND 25 THEN 'YOUNG'
+WHEN PASSENGER_AGE BETWEEN 26 AND 35 THEN 'ADULT'
+ELSE 'SENIOR'
+END AS EGE_CATEGORY,COUNT(*) 
+FROM FLIGHTS
+GROUP BY
+CASE
+WHEN PASSENGER_AGE BETWEEN 18 AND 25 THEN 'YOUNG'
+WHEN PASSENGER_AGE BETWEEN 26 AND 35 THEN 'ADULT'
+ELSE 'SENIOR'
+END;
+ 
