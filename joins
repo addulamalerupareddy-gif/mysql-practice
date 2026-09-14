@@ -1,0 +1,466 @@
+CREATE DATABASE IF NOT EXISTS techmart_db;
+USE techmart_db;
+
+CREATE TABLE customers (
+    customer_id INT PRIMARY KEY,
+    customer_name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    city VARCHAR(50),
+    phone VARCHAR(15)
+);
+
+CREATE TABLE employees (
+    employee_id INT PRIMARY KEY,
+    employee_name VARCHAR(100) NOT NULL,
+    department VARCHAR(50),
+    manager_id INT,
+    CONSTRAINT fk_employee_manager FOREIGN KEY (manager_id)
+        REFERENCES employees(employee_id)
+);
+
+CREATE TABLE categories (
+    category_id INT PRIMARY KEY,
+    category_name VARCHAR(50) UNIQUE NOT NULL
+);
+
+CREATE TABLE products (
+    product_id INT PRIMARY KEY,
+    product_name VARCHAR(100) NOT NULL,
+    category_id INT NOT NULL,
+    price DECIMAL(10,2) NOT NULL,
+    brand VARCHAR(50),
+    stock_quantity INT,
+    CONSTRAINT fk_product_category FOREIGN KEY (category_id)
+        REFERENCES categories(category_id)
+);
+
+CREATE TABLE orders (
+    order_id INT PRIMARY KEY,
+    customer_id INT NOT NULL,
+    employee_id INT NOT NULL,
+    order_date DATE NOT NULL,
+    order_status VARCHAR(20) NOT NULL,
+    payment_method VARCHAR(30) NOT NULL,
+    CONSTRAINT fk_order_customer FOREIGN KEY (customer_id)
+        REFERENCES customers(customer_id),
+    CONSTRAINT fk_order_employee FOREIGN KEY (employee_id)
+        REFERENCES employees(employee_id)
+);
+
+CREATE TABLE order_items (
+    order_item_id INT PRIMARY KEY,
+    order_id INT NOT NULL,
+    product_id INT NOT NULL,
+    quantity INT NOT NULL,
+    unit_price DECIMAL(10,2) NOT NULL,
+    CONSTRAINT fk_item_order FOREIGN KEY (order_id)
+        REFERENCES orders(order_id),
+    CONSTRAINT fk_item_product FOREIGN KEY (product_id)
+        REFERENCES products(product_id)
+);
+set foreign_key_checks=0;
+
+SELECT * FROM ORDER_ITEMS;
+
+-- Q1 
+SELECT *
+FROM ORDERS
+INNER JOIN CUSTOMERS;
+
+SELECT O.ORDER_ID,O.ORDER_DATE,C.CUSTOMER_NAME
+FROM ORDERS AS O
+LEFT JOIN CUSTOMERS AS C
+ON C.CUSTOMER_ID=O.CUSTOMER_ID;
+
+SELECT O.ORDER_ID,O.ORDER_DATE,C.CUSTOMER_NAME
+FROM ORDERS AS O
+RIGHT JOIN CUSTOMERS AS C
+ON C.CUSTOMER_ID=O.CUSTOMER_ID;
+
+SELECT O.ORDER_ID,O.ORDER_DATE,C.CUSTOMER_NAME
+FROM ORDERS AS O
+INNER JOIN CUSTOMERS AS C
+ON C.CUSTOMER_ID=O.CUSTOMER_ID;
+
+SELECT * from products;
+
+-- Q Display the names and cities of all customers from Hyderabad.
+SELECT c.Customer_Name, c.City
+FROM Customers c
+inner join orders o
+    ON c.Customer_ID = o.Customer_ID
+WHERE c.City = 'Hyderabad';
+
+-- Q2
+SELECT 
+    o.Order_ID,
+    c.Customer_Name,
+    o.Order_Date,
+    o.Order_Status
+FROM Orders o
+JOIN Customers c
+    ON o.Customer_ID = c.Customer_ID;
+
+-- Q3
+SELECT DISTINCT c.Customer_Name
+FROM Customers c
+JOIN Orders o
+    ON c.Customer_ID = o.Customer_ID;
+    
+-- Q4
+SELECT 
+    c.Customer_Name,
+    o.Order_ID,
+    o.Payment_Method
+FROM Customers c
+JOIN Orders o
+    ON c.Customer_ID = o.Customer_ID
+WHERE o.Payment_Method IN ('UPI', 'Credit Card');
+
+-- Q5
+SELECT *
+FROM Products
+WHERE Price BETWEEN 5000 AND 20000
+ORDER BY Price DESC;
+
+-- Q6
+SELECT 
+    c.Customer_Name,
+    COUNT(o.Order_ID) AS Number_of_Orders
+FROM Customers c
+JOIN Orders o
+    ON c.Customer_ID = o.Customer_ID
+GROUP BY c.Customer_ID, c.Customer_Name;
+
+-- Q7
+SELECT 
+    c.Customer_Name,
+    o.Order_ID
+FROM Customers c
+LEFT JOIN Orders o
+    ON c.Customer_ID = o.Customer_ID;
+    
+-- Q8
+SELECT 
+    c.Customer_Name
+FROM Customers c
+LEFT JOIN Orders o
+    ON c.Customer_ID = o.Customer_ID
+WHERE o.Order_ID IS NULL;
+
+-- Q9
+SELECT 
+    o.Order_ID,
+    c.Customer_Name,
+    e.Employee_Name
+FROM Orders o
+JOIN Customers c
+    ON o.Customer_ID = c.Customer_ID
+JOIN Employees e
+    ON o.Employee_ID = e.Employee_ID;
+    
+-- Q10
+SELECT 
+    p.Product_Name,
+    c.Category_Name,
+    p.Brand,
+    p.Price
+FROM Products p
+JOIN Categories c
+    ON p.Category_ID = c.Category_ID;
+    
+-- Q11
+SELECT 
+    p.Product_Name,
+    SUM(od.Quantity) AS Total_Quantity_Sold
+FROM Products p
+JOIN Order_items od
+    ON p.Product_ID = od.Product_ID
+GROUP BY p.Product_ID, p.Product_Name;
+
+-- Q12
+SELECT 
+    p.Product_Name,
+    SUM(od.Quantity * od.Unit_Price) AS Total_Revenue
+FROM Products p
+JOIN Order_ITEMS Od
+    ON p.Product_ID = od.Product_ID
+GROUP BY p.Product_ID, p.Product_Name;
+SHOW TABLES;
+
+-- q13
+SELECT 
+    p.Product_Name,
+    SUM(od.Quantity * od.Unit_Price) AS Total_Revenue
+FROM Products p
+JOIN Order_items od
+    ON p.Product_ID = od.Product_ID
+GROUP BY p.Product_ID, p.Product_Name
+ORDER BY Total_Revenue DESC
+LIMIT 5;
+
+-- Q14
+SELECT
+    c.Customer_Name,
+    SUM(od.Quantity * od.Unit_Price) AS Total_Spending
+FROM Customers c
+JOIN Orders o
+    ON c.Customer_ID = o.Customer_ID
+JOIN Order_ITEMS od
+    ON o.Order_ID = od.Order_ID
+GROUP BY c.Customer_ID, c.Customer_Name;
+
+-- Q15
+SELECT
+    c.Customer_Name,
+    SUM(od.Quantity * od.Unit_Price) AS Total_Spending
+FROM Customers c
+JOIN Orders o
+    ON c.Customer_ID = o.Customer_ID
+JOIN Order_Details od
+    ON o.Order_ID = od.Order_ID
+GROUP BY c.Customer_ID, c.Customer_Name
+ORDER BY Total_Spending DESC
+LIMIT 5;
+
+-- Q16
+SELECT
+    c.Customer_Name,
+    SUM(od.Quantity * od.Unit_Price) AS Total_Spending
+FROM Customers c
+JOIN Orders o
+    ON c.Customer_ID = o.Customer_ID
+JOIN Order_ITEMS od
+    ON o.Order_ID = od.Order_ID
+GROUP BY c.Customer_ID, c.Customer_Name
+HAVING SUM(od.Quantity * od.Unit_Price) > 30000;
+
+-- Q17
+SELECT
+    cat.Category_Name,
+    SUM(od.Quantity * od.Unit_Price) AS Total_Revenue
+FROM Categories cat
+JOIN Products p
+    ON cat.Category_ID = p.Category_ID
+JOIN Order_ITEMS od
+    ON p.Product_ID = od.Product_ID
+GROUP BY cat.Category_ID, cat.Category_Name
+ORDER BY Total_Revenue DESC;
+
+select * from products;
+select * from order_items;
+
+-- Q18
+SELECT
+    c.Category_Name,
+    SUM(od.Quantity * od.Unit_Price) AS Total_Revenue
+FROM Categories c
+JOIN Products p
+    ON c.Category_ID = p.Category_ID
+JOIN Order_ITEMS od
+    ON p.Product_ID = od.Product_ID
+GROUP BY c.Category_ID, c.Category_Name
+HAVING SUM(od.Quantity * od.Unit_Price) > 50000
+ORDER BY Total_Revenue DESC;
+
+-- Q19
+SELECT
+    e.Employee_Name,
+    COUNT(o.Order_ID) AS Number_of_Orders
+FROM Employees e
+JOIN Orders o
+    ON e.Employee_ID = o.Employee_ID
+GROUP BY e.Employee_ID, e.Employee_Name;
+
+-- Q20
+SELECT
+    e.Employee_Name,
+    COUNT(o.Order_ID) AS Number_of_Orders
+FROM Employees e
+JOIN Orders o
+    ON e.Employee_ID = o.Employee_ID
+GROUP BY e.Employee_ID, e.Employee_Name
+HAVING COUNT(o.Order_ID) > 3;
+
+-- Q21 
+SELECT
+    c.Customer_Name,
+    AVG(od.Quantity * od.Unit_Price) AS Average_Order_Value
+FROM Customers c
+JOIN Orders o
+    ON c.Customer_ID = o.Customer_ID
+JOIN Order_ITEMS od
+    ON o.Order_ID = od.Order_ID
+GROUP BY c.Customer_ID, c.Customer_Name;
+
+-- Q22
+SELECT
+    c.Customer_Name,
+    AVG(od.Quantity * od.Unit_Price) AS Average_Order_Value
+FROM Customers c
+JOIN Orders o
+    ON c.Customer_ID = o.Customer_ID
+JOIN Order_ITEMS od
+    ON o.Order_ID = od.Order_ID
+GROUP BY c.Customer_ID, c.Customer_Name
+HAVING AVG(od.Quantity * od.Unit_Price) > 15000;
+
+-- Q23
+SELECT
+    Order_Status,
+    COUNT(Order_ID) AS Number_of_Orders
+FROM Orders
+GROUP BY Order_Status;
+
+-- Q24
+SELECT
+    c.Category_Name,
+    SUM(od.Quantity * od.Unit_Price) AS Total_Revenue
+FROM Orders o
+JOIN Order_ITEMS od
+    ON o.Order_ID = od.Order_ID
+JOIN Products p
+    ON od.Product_ID = p.Product_ID
+JOIN Categories c
+    ON p.Category_ID = c.Category_ID
+WHERE o.Order_Status = 'Delivered'
+GROUP BY c.Category_ID, c.Category_Name;
+
+-- Q25
+SELECT
+    c.Category_Name,
+    p.Product_Name,
+    p.Price
+FROM Products p
+JOIN Categories c
+    ON p.Category_ID = c.Category_ID
+WHERE p.Price = (
+    SELECT MAX(p2.Price)
+    FROM Products p2
+    WHERE p2.Category_ID = p.Category_ID
+);
+
+-- Q26
+SELECT
+    Product_Name,
+    Price,
+    CASE
+        WHEN Price < 5000 THEN 'Budget'
+        WHEN Price BETWEEN 5000 AND 15000 THEN 'Standard'
+        WHEN Price > 15000 THEN 'Premium'
+    END AS Price_Category
+FROM Products;
+
+-- Q27
+SELECT
+    CASE
+        WHEN Price < 5000 THEN 'Budget'
+        WHEN Price BETWEEN 5000 AND 15000 THEN 'Standard'
+        WHEN Price > 15000 THEN 'Premium'
+    END AS Price_Category,
+    COUNT(*) AS Product_Count
+FROM Products
+GROUP BY Price_Category;
+
+-- Q28
+SELECT
+    e.Employee_Name AS Employee,
+    m.Employee_Name AS Manager
+FROM Employees e
+LEFT JOIN Employees m
+    ON e.Manager_ID = m.Employee_ID;
+    
+-- Q29
+SELECT
+    e.Employee_Name AS Employee,
+    m.Employee_Name AS Manager
+FROM Employees e
+LEFT JOIN Employees m
+    ON e.Manager_ID = m.Employee_ID;
+    
+-- Q30
+SELECT
+    c.City,
+    COUNT(DISTINCT c.Customer_ID) AS Customer_Count
+FROM Customers c
+JOIN Orders o
+    ON c.Customer_ID = o.Customer_ID
+GROUP BY c.City
+HAVING COUNT(DISTINCT c.Customer_ID) > 2;
+
+-- Q31
+SELECT
+    c.Customer_Name,
+    SUM(od.Quantity * od.Unit_Price) AS Total_Spending
+FROM Customers c
+JOIN Orders o
+    ON c.Customer_ID = o.Customer_ID
+JOIN Order_ITEMS od
+    ON o.Order_ID = od.Order_ID
+WHERE o.Order_Status = 'Delivered'
+GROUP BY c.Customer_ID, c.Customer_Name
+HAVING SUM(od.Quantity * od.Unit_Price) > 20000
+ORDER BY Total_Spending DESC
+LIMIT 3;
+
+-- Q32
+SELECT
+    c.Category_Name,
+    SUM(od.Quantity * od.Unit_Price) AS Total_Revenue
+FROM Categories c
+JOIN Products p
+    ON c.Category_ID = p.Category_ID
+JOIN Order_ITEMS od
+    ON p.Product_ID = od.Product_ID
+WHERE p.Price > 5000
+GROUP BY c.Category_ID, c.Category_Name
+ORDER BY Total_Revenue DESC
+LIMIT 3;
+ 
+-- Q33
+SELECT
+    e.Employee_Name,
+    COUNT(o.Order_ID) AS Delivered_Orders,
+    SUM(od.Quantity * od.Unit_Price) AS Total_Revenue
+FROM Employees e
+JOIN Orders o
+    ON e.Employee_ID = o.Employee_ID
+JOIN Order_ITEMS od
+    ON o.Order_ID = od.Order_ID
+WHERE o.Order_Status = 'Delivered'
+GROUP BY e.Employee_ID, e.Employee_Name
+HAVING COUNT(o.Order_ID) > 2;
+
+-- Q34
+SELECT
+    c.Customer_Name,
+    COUNT(DISTINCT o.Order_ID) AS Number_of_Orders,
+    COALESCE(SUM(od.Quantity), 0) AS Total_Quantity,
+    COALESCE(SUM(od.Quantity * od.Unit_Price), 0) AS Total_Spending
+FROM Customers c
+LEFT JOIN Orders o
+    ON c.Customer_ID = o.Customer_ID
+LEFT JOIN Order_ITEMS od
+    ON o.Order_ID = od.Order_ID
+GROUP BY c.Customer_ID, c.Customer_Name
+ORDER BY Total_Spending DESC;
+
+-- Q35
+SELECT
+    c.Customer_Name,
+    COUNT(DISTINCT o.Order_ID) AS Order_Count,
+    SUM(od.Quantity * od.Unit_Price) AS Total_Spending
+FROM Customers c
+JOIN Orders o
+    ON c.Customer_ID = o.Customer_ID
+JOIN Order_ITEMS od
+    ON o.Order_ID = od.Order_ID
+JOIN Products p
+    ON od.Product_ID = p.Product_ID
+WHERE o.Order_Status = 'Delivered'
+GROUP BY c.Customer_ID, c.Customer_Name
+HAVING COUNT(DISTINCT o.Order_ID) > 2
+   AND COUNT(DISTINCT p.Category_ID) > 1
+   AND SUM(od.Quantity * od.Unit_Price) > 30000
+ORDER BY Total_Spending DESC
+LIMIT 3;
